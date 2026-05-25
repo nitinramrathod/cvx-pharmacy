@@ -12,6 +12,7 @@ import { contactSchema, type ContactFormData } from "@/schemas/contact";
 import { SITE_CONFIG, SERVICES } from "@/constants";
 import { AnimatedSection, StaggerContainer, staggerItem } from "@/components/animations/AnimatedSection";
 import { cn } from "@/lib/utils";
+import { sendMail } from "@/utils/services/contact-us";
 
 const contactCards = [
   {
@@ -68,7 +69,8 @@ export function ContactClient() {
 
   const onSubmit = async (data: ContactFormData) => {
     // Simulate API call
-    await new Promise((r) => setTimeout(r, 1200));
+    await sendMail(data);
+    console.log("Form submitted:", data);
     setSubmitted(true);
     reset();
     toast.success("Message sent! We'll contact you shortly.", {
@@ -177,6 +179,9 @@ export function ContactClient() {
                         <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
                           Full Name <span className="text-rose-500">*</span>
                         </label>
+
+                        <input {...register("type")} type="hidden" name="type" value='contact' />
+
                         <input
                           {...register("name")}
                           placeholder="Your full name"
